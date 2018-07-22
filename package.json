@@ -1,0 +1,28 @@
+{
+  "name": "frontend-gulp-proj",
+  "version": "1.0.0",
+  "description": "1.)Utilizes gulp to: minify and concatenate JS/CSS files. 2.) Generate JS/CSS Source maps.3.) Compress PNG/JPEG files.",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Melvin-Viana/Project8-TeamTreehouse-Gulp.git"
+  },
+  "author": "Melvin Viana",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Melvin-Viana/Project8-TeamTreehouse-Gulp/issues"
+  },
+  "homepage": "https://github.com/Melvin-Viana/Project8-TeamTreehouse-Gulp#readme",
+  "devDependencies": {
+    "gulp-concat": "^2.6.1",
+    "gulp-minify": "^3.1.0",
+    "gulp-sass": "^4.0.1",
+    "gulp-sourcemaps": "^2.6.4"
+  },
+  "dependencies": {
+    "nodemon": "^1.18.3"
+  }
+}
