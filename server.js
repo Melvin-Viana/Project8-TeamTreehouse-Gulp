@@ -5,6 +5,6 @@ var fs = require("fs");
 
 app.use(express.static('dist'));
 
-app.listen(process.env.PORT || 8000,()=> {console.log('All is ok!');
+app.listen(process.env.PORT || 3000,()=> console.log('Index.html is running on localhost:3000')
 
-});
+);

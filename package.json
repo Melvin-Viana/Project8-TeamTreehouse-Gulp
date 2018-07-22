@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Melvin-Viana/Project8-TeamTreehouse-Gulp#readme",
   "devDependencies": {
+    "express": "^4.16.3",
     "gulp-concat": "^2.6.1",
     "gulp-minify": "^3.1.0",
     "gulp-sass": "^4.0.1",

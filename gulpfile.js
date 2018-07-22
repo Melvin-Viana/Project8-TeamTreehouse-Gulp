@@ -12,7 +12,7 @@ gulp.task("concatJS", () => {
   gulp
     .src(["js/circle/autogrow.js", "js/circle/circle.js"])
     .pipe(maps.init())              //Creates source map
-    .pipe(concat('js/global.js'))   //Concatenation
+    .pipe(concat('js/all.js'))   //Concatenation
     .pipe(maps.write("./"))         //Designates location of source map
     .pipe(gulp.dest("./"));         //Places all files within the js directory.
 });
