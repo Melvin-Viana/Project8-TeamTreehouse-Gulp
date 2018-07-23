@@ -2,13 +2,15 @@
 
 const gulp = require("gulp"),
   concat = require("gulp-concat"),
-  minify = require("gulp-minify"),
+  uglify = require("gulp-uglify"),
+  uglifyCss= require('gulp-uglifycss'),
   maps = require("gulp-sourcemaps"),
   rename = require("gulp-rename"),
   sass = require("gulp-sass"),
-  image = require("gulp-image"),
+  image = require("gulp-imagemin"),
   sequence = require("run-sequence").use(gulp),
-  del = require("del");
+  del = require("del"),
+  browserSync = require("browser-sync").create();
 
 /* gulp scripts command:
 1. Concatenate
@@ -19,10 +21,10 @@ const gulp = require("gulp"),
 gulp.task("scripts", () => {
   gulp
     .src(["js/circle/autogrow.js", "js/circle/circle.js"])
-    .pipe(concat("js/all.js")) //Concatenation    .pipe(maps.init())
-    .pipe(minify())
+    .pipe(concat("all.js")) //Concatenation    .pipe(maps.init())
     .pipe(maps.init())
-    .pipe(rename("all.min.js")) //This file will be copied to dist/scripts
+    .pipe(uglify())
+    .pipe(rename({ extname: '.min.js' }))
     .pipe(maps.write("./"))
     .pipe(gulp.dest("dist/scripts"));
 });
@@ -35,14 +37,21 @@ gulp.task("scripts", () => {
   4.Place source maps in dist/styles
   */
 gulp.task("styles", () => {
-  gulp
+  return gulp
     .src("sass/global.scss")
+    .pipe(
+      sass().on("error", function(err) {
+        console.error(err.message);
+        this.emit("end"); // Prevent gulp from catching the error and exiting the watch process
+      })
+    )
     .pipe(sass())
     .pipe(maps.init())
-    .pipe(minify())
-    .pipe(rename("all.min.css"))
+    .pipe(uglifyCss())
+    .pipe(rename('all.min.css'))
     .pipe(maps.write("./"))
-    .pipe(gulp.dest("dist/styles"));
+    .pipe(gulp.dest("dist/styles"))
+    .pipe(browserSync.stream());
 });
 
 //==============================================
@@ -62,36 +71,33 @@ gulp.task("images", () => {
 
 //gulp clean: Delete all folders/files from dist folder
 gulp.task("clean", () => {
-  del(["dist/*"]);
+  return del(["dist/*"]);
 });
 
 //=====================================
 //gulp build:
 //Runs clean command first then scripts,styles, and images
 gulp.task("build", ["clean"], () => {
- //Create dist data  
- sequence("scripts", "styles", "images");
-  //Copy index.html into dist folder
-  gulp
-  .src("index.html")
+  //Place index.html in dist folder
+  gulp.src("index.html")
   .pipe(gulp.dest("dist"));
+  //Create dist data
+  return sequence(["images", "scripts", "styles"]);
 });
-
-//================================================
-gulp.task("localServer", () => {
-  const express = require("express");
-  const app = express();
-
-  app.use(express.static("dist"));
-
-  app.listen(process.env.PORT || 3000, () =>
-    console.log("Index.html is running on localhost:3000")
-  );
-});
-
 //================================================
 //gulp default:
 gulp.task("default", ["build"], () => {
+
   /*This creates a web server and inserts public files into webserver and runs index.html*/
-  sequence("localServer");
+  browserSync.init({
+    server: "dist",
+    port: 3000,
+    notify: false
+  });
+  
+  gulp.watch("./sass/**/*.scss", ["styles"]);
+  gulp.watch("sass/**/*.scss").on("change", browserSync.reload);
+
+  //Kills process when gulpfile.js is changed
+  gulp.watch("gulpfile.js").on("change", () => process.exit(0));
 });
