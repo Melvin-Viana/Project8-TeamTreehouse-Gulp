@@ -2,3 +2,5 @@
 .sass-cache
 node_modules/
 dist/
+server.js
+css/
