@@ -4,8 +4,9 @@
   "description": "1.)Utilizes gulp to: minify and concatenate JS/CSS files. 2.) Generate JS/CSS Source maps.3.) Compress PNG/JPEG files.",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"gulp"
+ },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Melvin-Viana/Project8-TeamTreehouse-Gulp.git"
