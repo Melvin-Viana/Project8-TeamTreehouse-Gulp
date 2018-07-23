@@ -3,7 +3,7 @@
 const gulp = require("gulp"),
   concat = require("gulp-concat"),
   uglify = require("gulp-uglify"),
-  uglifyCss= require('gulp-uglifycss'),
+  uglifyCss = require("gulp-uglifycss"),
   maps = require("gulp-sourcemaps"),
   rename = require("gulp-rename"),
   sass = require("gulp-sass"),
@@ -21,10 +21,10 @@ const gulp = require("gulp"),
 gulp.task("scripts", () => {
   gulp
     .src(["js/circle/autogrow.js", "js/circle/circle.js"])
-    .pipe(concat("all.js")) //Concatenation    .pipe(maps.init())
+    .pipe(concat("all.js")) 
     .pipe(maps.init())
     .pipe(uglify())
-    .pipe(rename({ extname: '.min.js' }))
+    .pipe(rename({ extname: ".min.js" }))
     .pipe(maps.write("./"))
     .pipe(gulp.dest("dist/scripts"));
 });
@@ -48,10 +48,10 @@ gulp.task("styles", () => {
     .pipe(sass())
     .pipe(maps.init())
     .pipe(uglifyCss())
-    .pipe(rename('all.min.css'))
+    .pipe(rename("all.min.css"))
     .pipe(maps.write("./"))
     .pipe(gulp.dest("dist/styles"))
-    .pipe(browserSync.stream());
+    .pipe(browserSync.stream()); //Displays files changed in [Browsersync] <message>
 });
 
 //==============================================
@@ -69,35 +69,42 @@ gulp.task("images", () => {
 
 //=====================================
 
-//gulp clean: Delete all folders/files from dist folder
+//gulp clean: 
+//Delete all folders/files from dist folder
 gulp.task("clean", () => {
   return del(["dist/*"]);
 });
 
 //=====================================
-//gulp build:
-//Runs clean command first then scripts,styles, and images
+/*gulp build:
+  1. Runs clean command 
+  2. Optimize files into dist folder
+*/
 gulp.task("build", ["clean"], () => {
   //Place index.html in dist folder
   gulp.src("index.html")
-  .pipe(gulp.dest("dist"));
+      .pipe(gulp.dest("dist"));
   //Create dist data
   return sequence(["images", "scripts", "styles"]);
 });
 //================================================
-//gulp default:
-gulp.task("default", ["build"], () => {
 
+/*gulp default:
+  1.Runs build task 
+  2.Serve proj. in local web server
+*/
+gulp.task("default", ["build"], () => {
   /*This creates a web server and inserts public files into webserver and runs index.html*/
   browserSync.init({
     server: "dist",
     port: 3000,
     notify: false
   });
-  
+
   gulp.watch("./sass/**/*.scss", ["styles"]);
   gulp.watch("sass/**/*.scss").on("change", browserSync.reload);
 
   //Kills process when gulpfile.js is changed
-  gulp.watch("gulpfile.js").on("change", () => process.exit(0));
+  gulp.watch("gulpfile.js")
+  .on("change", () => process.exit(0));
 });
