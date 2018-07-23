@@ -82,7 +82,8 @@ gulp.task("clean", () => {
 */
 gulp.task("build", ["clean"], () => {
   //Place index.html in dist folder
-  gulp.src("index.html")
+  gulp.src(["index.html",'icons/**'],{ base: "./" }
+)
       .pipe(gulp.dest("dist"));
   //Create dist data
   return sequence(["images", "scripts", "styles"]);
