@@ -1,6 +1,6 @@
 # Project8-TeamTreehouse-Gulp
 Utilize gulp to create a frontend website
-##Dev Dependencies:
+## Dev Dependencies:
 * Browser-sync
 * del
 * gulp
